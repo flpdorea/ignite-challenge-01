@@ -76,6 +76,10 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
 
   const todo = user.todos.find(item => item.id === id)
 
+  if (!todo) {
+    return response.status(404).json({ 'error': 'Invalid todo id.' })
+  }
+
   todo.title = title
   todo.deadline = new Date(deadline)
 
@@ -88,6 +92,10 @@ app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
 
   const todo = user.todos.find(item => item.id === id)
 
+  if (!todo) {
+    return response.status(404).json({ 'error': 'Invalid todo id.' })
+  }
+
   todo.done = true
 
   return response.json(todo)
@@ -98,6 +106,10 @@ app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
   const { id } = request.params
 
   const todo = user.todos.findIndex(item => item.id === id)
+
+  if (todo == -1) {
+    return response.status(404).json({ 'error': 'Invalid todo id.' })
+  }
 
   user.todos.splice(todo, 1)
 
