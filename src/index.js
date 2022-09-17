@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// const users = [];
+const users = [];
 
 function checksExistsUserAccount(request, response, next) {
   // Complete aqui
@@ -24,7 +24,16 @@ app.post('/users', (request, response) => {
     todos: []
   }
 
-  return response.json(user)
+  const userAlreadyExists = users.some((user) => user.username === username)
+
+  if (userAlreadyExists) {
+    return response.status(400).json({ 'error': 'User already exists!' })
+  }
+
+  users.push(user)
+
+  return response.status(201).json(user)
+
 });
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {
