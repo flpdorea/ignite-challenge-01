@@ -83,11 +83,25 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
 });
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const { id } = request.params
+  const { user } = request
+
+  const todo = user.todos.find(item => item.id === id)
+
+  todo.done = true
+
+  return response.json(todo)
 });
 
 app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const { user } = request
+  const { id } = request.params
+
+  const todo = user.todos.findIndex(item => item.id === id)
+
+  user.todos.splice(todo, 1)
+
+  return response.status(204).json(user)
 });
 
 module.exports = app;
